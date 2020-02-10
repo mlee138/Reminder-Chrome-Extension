@@ -64,14 +64,11 @@ var ListController = (function() {
 
             var filtered = items.map(function(obj){
                 var objDate = new Date(obj.deadline);
-                if(filter === "today" && today.getTime() === objDate.getTime()) {
-                        return obj;
-                } else if(filter === "tomorrow"){
-                    if(tomorrow.getTime() === objDate.getTime()){
-                        return obj;
-                    }
-                } else if (filter === "incomplete" && today.getTime() > objDate.getTime()){
-                        return obj;
+                if(filter === "all" ||
+                (filter === "today" && today.getTime() === objDate.getTime()) ||
+                (filter === "tomorrow" && tomorrow.getTime() === objDate.getTime()) ||
+                (filter === "incomplete" && today.getTime() > objDate.getTime())){
+                    return obj;
                 }
             });
             return filtered;
@@ -87,7 +84,6 @@ var UIController = (function() {
         time: "#info--time",
         input: ".info--input",
         addBtn: ".info--add",
-        viewAllReminders: ".info--viewAll",
         list: ".list--items",
         item: ".item",
         options: ".list--options"
@@ -163,7 +159,7 @@ var UIController = (function() {
         },
         deleteItem: function(id){
             var selector = "#" + id;
-            $(selector).fadeOut();
+            $(selector).fadeOut(300);
             setTimeout(function(){
                 $(selector).remove();
             }, 500);
@@ -206,6 +202,24 @@ var Controller = (function(listCtrl, uiCtrl){
         });
     }
 
+    function checkItem(item){
+        var now = new Date();
+        now.setHours(0,0,0,0);
+        var tomorrow = new Date();
+            tomorrow.setHours(0,0,0,0);
+            tomorrow.setDate(now.getDate()+1);
+        var objDate = new Date(item.deadline);
+        var option = uiCtrl.getViewOption();
+
+        if(option === "all" ||
+        (option === "today" && now.getTime() === objDate.getTime()) ||
+        (option === "tomorrow" && tomorrow.getTime() === objDate.getTime()) ||
+        (option === "incomplete" && now.getTime() > objDate.getTime())){
+            return true;
+        }
+        return false;
+    }
+
     function handleAdd(e) {
         e.preventDefault();
         //get the input
@@ -213,21 +227,8 @@ var Controller = (function(listCtrl, uiCtrl){
         //add the item
         var newItem = listCtrl.addItem(userInputs.text, userInputs.date);
         //check if UI should be updated
-        var now = new Date();
-        now.setHours(0,0,0,0);
-        var objDate = new Date(newItem.deadline);
-
-        var option = uiCtrl.getViewOption();
-        if(option === "today" && now.getTime() === objDate.getTime()){
+        if(checkItem(newItem)){
             uiCtrl.addItem(newItem);
-        } else if(option === "incomplete" && now.getTime() > objDate.getTime()){
-            uiCtrl.addItem(newItem);
-        } else if (option === "tomorrow"){
-            var tomorrow = now;
-            tomorrow.setDate(now.getDate()+1);
-            if(tomorrow.getTime() === objDate.getTime()){
-                uiCtrl.addItem(newItem);
-            }
         }
         //clear the fields
         uiCtrl.resetFields();

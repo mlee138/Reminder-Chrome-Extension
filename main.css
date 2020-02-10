@@ -59,15 +59,6 @@ body {
     text-transform: uppercase;
     cursor: pointer;
 }
-#info--viewAll{
-    border-radius: 30px;
-    background-color: transparent;
-    border: 2px solid #89844d;
-    padding: 10px;
-    margin-top: 70px;
-    font-family: var(--font-family);
-    cursor: pointer;
-}
 #info p { margin: 0; }
 
 .list {
@@ -88,11 +79,17 @@ body {
     margin-top: 10px;
 }
     .list--options fieldset{
-        border: none;
+        flex-grow: 2;
         margin: 0;
+        border: none;
+        border-right: 2px solid lightgray;
+        text-align: center;
+    }
+    .list--options fieldset:last-child {
+        border-right: none;
     }
     .list--options label {
-        opacity: 0.5;
+        opacity: 0.4;
     }
     .list--options input[type="radio"]{
         display: none;
@@ -165,6 +162,4 @@ body {
     }
 
     #info { text-align: center; }
-
-    #info--viewAll { margin-bottom: 30px; }
 }
