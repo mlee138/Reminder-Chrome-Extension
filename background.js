@@ -76,12 +76,89 @@ var ListController = (function() {
     }
 })();
 
+var QuoteController = (function(){
+    var quotes = [
+        {text: "Life is about making an impact, not making an income.", author: "Kevin Kruse"},
+        {text: "Whatever the mind of man can conceive and believe, it can achieve.", author: "Napoleon Hill"},
+        {text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein"},
+        {text: "Two roads diverged in a wood, and I—I took the one less traveled by, And that has made all the difference.", author: "Robert Frost"},
+        {text: "I attribute my success to this: I never gave or took any excuse.", author: "Florence Nightingale"},
+        {text: "You miss 100% of the shots you don’t take.", author: "Wayne Gretzky"},
+        {text: "The most difficult thing is the decision to act, the rest is merely tenacity.", author: "Amelia Earhart"},
+        {text: "Every strike brings me closer to the next home run.", author: "Babe Ruth"},
+        {text: "Definiteness of purpose is the starting point of all achievement.", author: "W. Clement Stone"},
+        {text: "Life isn't about getting and having, it's about giving and being.", author: "Kevin Kruse"},
+        {text: "Life is what happens to you while you’re busy making other plans.", author: "John Lennon"},
+        {text: "We become what we think about.", author: "Earl Nightingale"},
+        {text: "Life is 10% what happens to me and 90% of how I react to it.", author: "Charles Swindoll"},
+        {text: "The most common way people give up their power is by thinking they don’t have any.", author: "Alice Walker"},
+        {text: "The mind is everything. What you think you become.", author: "Buddha"},
+        {text: "Eighty percent of success is showing up.", author: "Woody Allen"},
+        {text: "Your time is limited, so don’t waste it living someone else’s life.", author: "Steve Jobs"},
+        {text: "Winning isn’t everything, but wanting to win is.", author: "Vince Lombardi"},
+        {text: "I am not a product of my circumstances. I am a product of my decisions.", author: "Stephen Covey"},
+        {text: "Whether you think you can or you think you can’t, you’re right.", author: "Henry Ford"},
+        {text: "The two most important days in your life are the day you are born and the day you find out why.", author: "Mark Twain"},
+        {text: "The best revenge is massive success.", author: "Frank Sinatra"},
+        {text: "People often say that motivation doesn’t last. Well, neither does bathing.  That’s why we recommend it daily.", author: "Zig Ziglar"},
+        {text: "Life shrinks or expands in proportion to one's courage.", author: "Anais Nin"},
+        {text: "If you hear a voice within you say “you cannot paint,” then by all means paint and that voice will be silenced.", author: "Vincent Van Gogh"},
+        {text: "The only person you are destined to become is the person you decide to be.", author: "Ralph Valdo Emerson"},
+        {text: "Go confidently in the direction of your dreams.  Live the life you have imagined.", author: "Henry David Thoreau"},
+        {text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt"},
+        {text: "Everything you’ve ever wanted is on the other side of fear.", author: "George Addair"},
+        {text: "Start where you are. Use what you have.  Do what you can.", author: "Arthur Ashe"},
+        {text: "Everything has beauty, but not everyone can see.", author: "Confucius"},
+        {text: "How wonderful it is that nobody need wait a single moment before starting to improve the world.", author: "Anne Frank"},
+        {text: "When I let go of what I am, I become what I might be.", author: "Lao Tzu"},
+        {text: "Life is not measured by the number of breaths we take, but by the moments that take our breath away.", author: "Maya Angelou"},
+        {text: "Happiness is not something readymade.  It comes from your own actions.", author: "Dalai Lama"}
+    ];
+    var currentQuote = 0;
+
+    function updateQuoteDate(){
+        var quoteDate = JSON.parse(localStorage.getItem('quoteDate'));
+        var quoteNum = JSON.parse(localStorage.getItem('quoteNumber'));
+        if(quoteDate === null){ ////there is no quoteDate stored
+            saveQuoteDate(new Date(), 0);
+            currentQuote = 0;
+        } else{
+            var oldDate = new Date(quoteDate);
+            var today = new Date();
+            today.setHours(0,0,0,0);
+            if(oldDate.getTime() !== today.getTime()){
+                currentQuote += 1;
+                if(currentQuote === quotes.length){
+                    currentQuote = 0;
+                }
+                saveQuoteDate(today, currentQuote);
+            }
+        }
+    }
+
+    function saveQuoteDate(newDate, num){
+        newDate.setHours(0,0,0,0);
+        localStorage.setItem('quoteNumber', JSON.stringify(num));
+        localStorage.setItem('quoteDate', JSON.stringify(newDate));
+        console.log("quotedate saved");
+    }
+
+    return {
+        getTodaysQuote: function(){
+            updateQuoteDate();
+            return quotes[currentQuote];
+        }
+    }
+})();
+
 //Controls the User Interface===============
 var UIController = (function() {
     var DOMstrings = {
         datePicker: ".info--datepicker",
         date: "#info--date",
         time: "#info--time",
+        quote: "#info--quote",
+        author: "#info--author",
         input: ".info--input",
         addBtn: ".info--add",
         list: ".list--items",
@@ -175,12 +252,18 @@ var UIController = (function() {
         },
         focusInput: function(){
             $(DOMstrings.input).focus();
+        },
+        addQuote: function(quote) {
+            $(DOMstrings.quote).text(quote);
+        },
+        addAuthor: function(author) {
+            $(DOMstrings.author).text(author);
         }
     }
 })();
 
 //Communicates between controllers===============
-var Controller = (function(listCtrl, uiCtrl){
+var Controller = (function(listCtrl, uiCtrl, quoteCtrl){
     var DOMstrings = uiCtrl.getDOMstrings();
     function setupEventListeners() {
         console.log("setupEventListeners");
@@ -200,6 +283,14 @@ var Controller = (function(listCtrl, uiCtrl){
                 uiCtrl.addItem(obj);
             }
         });
+    }
+
+    function addQuote(){
+        //get today's quote
+        var today = quoteCtrl.getTodaysQuote();
+        //show quote in UI
+        uiCtrl.addQuote(today.text);
+        uiCtrl.addAuthor(today.author);
     }
 
     function checkItem(item){
@@ -263,10 +354,11 @@ var Controller = (function(listCtrl, uiCtrl){
         init: function(){
             setupEventListeners();
             uiCtrl.updateClock();
+            addQuote();
             loadInitialList();
         }
     }
-})(ListController, UIController);
+})(ListController, UIController, QuoteController);
 
 //Start==============================
 $(document).ready(function(){

@@ -22,12 +22,15 @@ body {
     justify-content: space-around;
     align-items: center;
 }
-#info--date {
-    font-size: 3em;
-}
-#info--time {
-    font-size: 4.5em;
-}
+    #info div:nth-child(1) p {
+        margin: 0;
+    }
+    #info--date {
+        font-size: 3em;
+    }
+    #info--time {
+        font-size: 4.5em;
+    }
 #info form {
     display: flex;
     align-items: center;
@@ -59,7 +62,22 @@ body {
     text-transform: uppercase;
     cursor: pointer;
 }
-#info p { margin: 0; }
+#info--quote {
+    margin-top: 70px;
+    font-style: italic;
+    font-size: 1.4em;
+}
+    #info--quote::before, #info--quote::after {
+        content: '"';
+        font-style: italic;
+    }
+#info--author {
+    text-align: right;
+    font-size: 1.4em;
+}
+    #info--author::before{
+        content: "- "
+    }
 
 .list {
     position: relative;
