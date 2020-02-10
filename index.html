@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>new tab</title>
+    <link href="main.css" rel="stylesheet" type="text/css"/>
+    <link href="jquery-ui-1.12.1.custom/jquery-ui.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+    <div class="container">
+        <div id="info">
+            <div>
+                <p id="info--date"></p>
+                <p id="info--time"></p>
+            </div>
+            <form id="info--form">
+                <input class="info--input" type="text" placeholder="Add Reminder"/>
+                <input class="info--datepicker" type="text"/>
+                <button class="info--add">add</button>
+            </form>
+            <button id="info--viewAll">View all Reminders</button>
+        </div>
+        
+        <div class="list">
+            <div class="list--options">
+                <fieldset>
+                    <input id="option1" type="radio" name="option" value="today" checked/>
+                    <label for="option1">Today</label>
+                </fieldset>
+                <span class="separator"></span>
+                <fieldset>
+                    <input id="option2" type="radio" name="option" value="tomorrow"/>    
+                    <label for="option2">Tomorrow</label>
+                </fieldset>
+                <span class="separator"></span>
+                <fieldset>
+                    <input id="option3" type="radio" name="option" value="done"/>
+                    <label for="option3">Done</label>
+                </fieldset>
+            </div>
+            <ul class="list--items">                
+                <!--<li class="item">
+                    <div class="item--text">
+                        <p></p>
+                        <p></p>
+                    </div>
+                    <button class="item--btn"></button>
+                </li>-->      
+            </ul>
+        </div>
+    </div>
+    <script src="jquery-ui-1.12.1.custom/external/jquery/jquery.js" type="text/javascript"></script>
+    <script src="jquery-ui-1.12.1.custom/jquery-ui.js" type="text/javascript"></script>
+    <script src="background.js" type="text/javascript"></script>
+</body>
+</html>
