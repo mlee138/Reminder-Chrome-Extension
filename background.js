@@ -77,7 +77,7 @@ var ListController = (function() {
 })();
 
 var QuoteController = (function(){
-    var quotes = [
+    const quotes = [
         {text: "Life is about making an impact, not making an income.", author: "Kevin Kruse"},
         {text: "Whatever the mind of man can conceive and believe, it can achieve.", author: "Napoleon Hill"},
         {text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein"},
@@ -114,51 +114,23 @@ var QuoteController = (function(){
         {text: "Life is not measured by the number of breaths we take, but by the moments that take our breath away.", author: "Maya Angelou"},
         {text: "Happiness is not something readymade.  It comes from your own actions.", author: "Dalai Lama"}
     ];
-    var currentQuote = 0;
-
-    function updateQuoteDate(){
-        var quoteDate = JSON.parse(localStorage.getItem('quoteDate'));
-        var quoteNum = JSON.parse(localStorage.getItem('quoteNumber'));
-        if(quoteDate === null){ ////there is no quoteDate stored
-            saveQuoteDate(new Date(), 0);
-            currentQuote = 0;
-        } else{
-            var oldDate = new Date(quoteDate);
-            var today = new Date();
-            today.setHours(0,0,0,0);
-            if(oldDate.getTime() !== today.getTime()){
-                currentQuote += 1;
-                if(currentQuote === quotes.length){
-                    currentQuote = 0;
-                }
-                saveQuoteDate(today, currentQuote);
-            }
-        }
-    }
-
-    function saveQuoteDate(newDate, num){
-        newDate.setHours(0,0,0,0);
-        localStorage.setItem('quoteNumber', JSON.stringify(num));
-        localStorage.setItem('quoteDate', JSON.stringify(newDate));
-        console.log("quotedate saved");
-    }
 
     return {
-        getTodaysQuote: function(){
-            updateQuoteDate();
-            return quotes[currentQuote];
+        getQuote: function(){
+            let rand = Math.floor(Math.random()*35);
+            return quotes[rand];
         }
     }
 })();
 
 //Controls the User Interface===============
 var UIController = (function() {
-    var DOMstrings = {
+    const DOMstrings = {
         datePicker: ".info--datepicker",
         date: "#info--date",
         time: "#info--time",
-        quote: "#info--quote",
-        author: "#info--author",
+        quote: "#info--quote--text",
+        author: "#info--quote--author",
         input: ".info--input",
         addBtn: ".info--add",
         list: ".list--items",
@@ -287,7 +259,7 @@ var Controller = (function(listCtrl, uiCtrl, quoteCtrl){
 
     function addQuote(){
         //get today's quote
-        var today = quoteCtrl.getTodaysQuote();
+        var today = quoteCtrl.getQuote();
         //show quote in UI
         uiCtrl.addQuote(today.text);
         uiCtrl.addAuthor(today.author);

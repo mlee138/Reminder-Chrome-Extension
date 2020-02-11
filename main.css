@@ -62,20 +62,24 @@ body {
     text-transform: uppercase;
     cursor: pointer;
 }
+
 #info--quote {
-    margin-top: 70px;
+    margin: 70px 0;
+    max-width: 500px;
+}
+#info--quote--text {
     font-style: italic;
     font-size: 1.4em;
 }
-    #info--quote::before, #info--quote::after {
+    #info--quote--text::before, #info--quote--text::after {
         content: '"';
         font-style: italic;
     }
-#info--author {
+#info--quote--author {
     text-align: right;
     font-size: 1.4em;
 }
-    #info--author::before{
+    #info--quote--author::before{
         content: "- "
     }
 
@@ -180,4 +184,5 @@ body {
     }
 
     #info { text-align: center; }
+    #info--quote { margin: 30px 0;}
 }
