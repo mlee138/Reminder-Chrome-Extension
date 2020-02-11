@@ -105,6 +105,7 @@ body {
         margin: 0;
         border: none;
         border-right: 2px solid lightgray;
+        box-sizing: border-box;
         text-align: center;
     }
     .list--options fieldset:last-child {
